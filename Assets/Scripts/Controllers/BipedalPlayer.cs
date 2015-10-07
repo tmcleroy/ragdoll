@@ -13,9 +13,13 @@ public class BipedalPlayer : MonoBehaviour {
   public float speed;
   public float legDrag;
   public float kneeBend;
-  public float legUpForce;
   public float calfMass;
+  // 0 - 1, factor by which the calfs shorten when moving (to help them not collide with the ground)
+  public float calfShortening;
   public float airTimeBeforeFall;
+  public float minThighRotation;
+  public float maxThighRotation;
+  public float thighRotationSpeed;
 
 	// tracks how long both feet have been in the air
 	private float secondsInAir;
@@ -47,6 +51,7 @@ public class BipedalPlayer : MonoBehaviour {
 
   void FixedUpdate () {
     updateMovementVectors();
+    moveLegs();
     updateMovementConstraints();
 		handleSpecialInput();
   }
@@ -56,21 +61,18 @@ public class BipedalPlayer : MonoBehaviour {
     legLeftVel = Input.GetKey("a") ? -1 : 0;
     legRightVel = Input.GetKey("d") ? -1 : 0;;
 
-    mVecs["legLeft"] = new Vector3(legUpForce, legLeftVel, 0.0f);
-    mVecs["legRight"] = new Vector3(legUpForce, legRightVel, 0.0f);
+    mVecs["legLeft"] = new Vector3(0.0f, legLeftVel, 0.0f);
+    mVecs["legRight"] = new Vector3(0.0f, legRightVel, 0.0f);
     mVecs["calfLeftRotate"] = new Vector3(0, 0, legLeftVel != 0 ? kneeBend : 0);
     mVecs["calfRightRotate"] = new Vector3(0, 0, legRightVel != 0 ? kneeBend : 0);
-
-    moveLegs();
   }
 
   private void updateMovementConstraints () {
 		// at least one calf is grounded
     if (calfLeft.isCollidingWithFloor || calfRight.isCollidingWithFloor) {
       secondsInAir = 0;
-    } else {
+    } else { // both in air
       secondsInAir += Time.deltaTime;
-      // Debug.Log("both in air for " + secondsInAir);
     }
     if (secondsInAir > airTimeBeforeFall) {
       disableSkeletonSprings();
@@ -100,10 +102,34 @@ public class BipedalPlayer : MonoBehaviour {
     rigidBodies["calfRight"].drag = legRightVel == 0 ? legDrag : 0;
 
 		// adjust the height of the calf capsule colliders so they don't hit the ground as easily
-		capsuleColliders["calfLeft"].height = capsuleColliderHeight * (legLeftVel == 0 ? 1 : 0.7f);
-    capsuleColliders["calfRight"].height = capsuleColliderHeight * (legRightVel == 0 ? 1 : 0.7f);
+		capsuleColliders["calfLeft"].height = capsuleColliderHeight * (legLeftVel == 0 ? 1 : calfShortening);
+    capsuleColliders["calfRight"].height = capsuleColliderHeight * (legRightVel == 0 ? 1 : calfShortening);
+    rotateThighJoints();
   }
 
+  private void rotateThighJoints() {
+    CharacterJoint thighJointRight = thighRight.GetComponent<CharacterJoint>();
+    CharacterJoint thighJointLeft = thighLeft.GetComponent<CharacterJoint>();
+    SoftJointLimit thighJointLimitRight = thighJointRight.lowTwistLimit;
+    SoftJointLimit thighJointLimitLeft = thighJointLeft.lowTwistLimit;
+
+    if (mVecs["legRight"] != Vector3.zero) {
+      thighJointLimitRight.limit = Mathf.Min(maxThighRotation, thighJointLimitRight.limit + thighRotationSpeed);
+    } else {
+      thighJointLimitRight.limit = Mathf.Max(minThighRotation, thighJointLimitRight.limit - thighRotationSpeed);
+    }
+
+    if (mVecs["legLeft"] != Vector3.zero) {
+      thighJointLimitLeft.limit = Mathf.Min(maxThighRotation, thighJointLimitLeft.limit + thighRotationSpeed);
+    } else {
+      thighJointLimitLeft.limit = Mathf.Max(minThighRotation, thighJointLimitLeft.limit - thighRotationSpeed);
+    }
+
+    thighJointRight.lowTwistLimit = thighJointLimitRight;
+    thighJointLeft.lowTwistLimit = thighJointLimitLeft;
+  }
+
+  // makes character collapse
   private void disableSkeletonSprings () {
     SpringJoint[] springJoints;
     springJoints = skeletonSprings.GetComponentsInChildren<SpringJoint>();
@@ -113,6 +139,7 @@ public class BipedalPlayer : MonoBehaviour {
     }
   }
 
+  // revives the character
   private void enableSkeletonSprings () {
     SpringJoint[] springJoints;
     springJoints = skeletonSprings.GetComponentsInChildren<SpringJoint>();

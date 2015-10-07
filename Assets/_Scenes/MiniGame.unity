@@ -113,9 +113,12 @@ MonoBehaviour:
   speed: 1300
   legDrag: 100
   kneeBend: -350
-  legUpForce: .75
   calfMass: 2
+  calfShortening: .949999988
   airTimeBeforeFall: 2
+  minThighRotation: -10
+  maxThighRotation: 90
+  thighRotationSpeed: 3
 --- !u!1 &72807907
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,19 +293,19 @@ CharacterJoint:
   m_ConnectedBody: {fileID: 788408884}
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: -1}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: .0389044695, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 0
+  m_ConnectedAnchor: {x: .0389044695, y: 2.98023135e-08, z: 2.40678588e-11}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: -1, z: 0}
   m_TwistLimitSpring:
     spring: 0
     damper: 0
   m_LowTwistLimit:
-    limit: -20
+    limit: -177
     bounciness: 0
     contactDistance: 0
   m_HighTwistLimit:
-    limit: 70
+    limit: 177
     bounciness: 0
     contactDistance: 0
   m_SwingLimitSpring:
@@ -942,7 +945,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400134, guid: c375a17f5f510d44c839b216989e242d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: .00999999978
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400134, guid: c375a17f5f510d44c839b216989e242d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3537,19 +3540,19 @@ CharacterJoint:
   m_ConnectedBody: {fileID: 788408884}
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: -1}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -.0389044695, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 0
+  m_ConnectedAnchor: {x: -.0389044695, y: 2.98023135e-08, z: 2.40678588e-11}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: -1, z: 0}
   m_TwistLimitSpring:
     spring: 0
     damper: 0
   m_LowTwistLimit:
-    limit: -20
+    limit: -177
     bounciness: 0
     contactDistance: 0
   m_HighTwistLimit:
-    limit: 70
+    limit: 177
     bounciness: 0
     contactDistance: 0
   m_SwingLimitSpring:
@@ -3940,7 +3943,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1652803207}
   m_LocalRotation: {x: 0, y: -.707106829, z: 0, w: .707106709}
-  m_LocalPosition: {x: .764999986, y: .731000006, z: .0299999993}
+  m_LocalPosition: {x: .764999986, y: .356000006, z: .0299999993}
   m_LocalScale: {x: .200000003, y: 0, z: .200000003}
   m_Children: []
   m_Father: {fileID: 2010300050}
