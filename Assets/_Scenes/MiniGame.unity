@@ -115,10 +115,10 @@ MonoBehaviour:
   kneeBend: -350
   calfMass: 2
   calfShortening: .949999988
-  airTimeBeforeFall: 2
+  airTimeBeforeFall: 1.70000005
   minThighRotation: -10
   maxThighRotation: 90
-  thighRotationSpeed: 3
+  thighRotationSpeed: 3.20000005
 --- !u!1 &72807907
 GameObject:
   m_ObjectHideFlags: 0
@@ -2702,7 +2702,7 @@ SpringJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: -.19364427, y: -.0323853381, z: 2.26146057e-07}
-  m_Spring: 300
+  m_Spring: 200
   m_Damper: 0
   m_MinDistance: 0
   m_MaxDistance: 0

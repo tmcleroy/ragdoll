@@ -93,7 +93,7 @@ public class BipedalPlayer : MonoBehaviour {
     rigidBodies["thighRight"].AddRelativeForce(mVecs["legRight"] * (speed + 10) * Time.deltaTime);
     rigidBodies["calfLeft"].AddRelativeForce(mVecs["legLeft"] * (speed - 10) * Time.deltaTime);
     rigidBodies["calfRight"].AddRelativeForce(mVecs["legRight"] * (speed - 10) * Time.deltaTime);
-
+    
     calfLeft.transform.Rotate(mVecs["calfLeftRotate"] * Time.deltaTime);
     calfRight.transform.Rotate(mVecs["calfRightRotate"] * Time.deltaTime);
 
